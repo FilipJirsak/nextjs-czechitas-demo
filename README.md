@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+ # Next.js demo pro Digitální akademii Web
 
-## Getting Started
+## Vytvoření projektu
 
-First, run the development server:
+Podle návodu na https://nextjs.org:
+
+```bash
+npx create-next-app@latest
+```
+
+
+## Lokální vývoj
+
+Spuštění vývojového serveru:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikace je po spuštění dostupná na http://localhost:3000.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Podpora pro MDX (Markdown)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Instalace knihoven:
 
-## Learn More
+```bash
+npm install @next/mdx @mdx-js/loader @mdx-js/react next-mdx-remote
+```
 
-To learn more about Next.js, take a look at the following resources:
+Vytvořit soubor `/mdx-components.jsx` s obsahem:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```jsx
+export const useMDXComponents = (components) => {
+  return {
+    ...components,
+  }
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Soubor `/next.config.js` přepsat následujícím obsahem:
 
-## Deploy on Vercel
+```js
+const withMDX = require('@next/mdx')()
+ 
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Configure `pageExtensions` to include MDX files
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  // Optionally, add any other Next.js config below
+}
+ 
+module.exports = withMDX(nextConfig)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Administrace
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Instalace knihovny:
+```bash
+npm install @staticcms/core@latest
+```
+
+Vytvořit adresář `/src/app/admin` a do něj umístit následující soubory:
+
+### layout.jsx
+```jsx
+import Script from "next/script";
+
+export const metadata = {
+  title: "Administrace",
+};
+
+export default ({ children }) => {
+  return (
+    <html lang="cs">
+      <Script
+        src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        async
+      />
+      <body>{children}</body>
+    </html>
+  );
+};
+```
+
+### page.jsx
+
+```jsx
+"use client";
+
+import dynamic from "next/dynamic";
+
+export default () => {
+  const CMSPage = useMemo(
+    () =>
+      dynamic(() => import("@/components/cms/CMSPage"), {
+        ssr: false,
+      }),
+    []
+  );
+
+  return useMemo(() => <CMSPage key="admin" />, [CMSPage]);
+};
+```
+
+* přidat komponentu `cms/CMSPage.jsx`
+* nakonfigurovat administraci v souboru `/src/config.js`
+* spustit `npx @staticcms/proxy-server`
