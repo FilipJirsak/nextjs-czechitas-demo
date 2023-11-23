@@ -3,7 +3,7 @@ import { SectionTitle } from "../../components/Common/SectionTitle";
 const Obrazek = ({ image }) => (
   <div className="w-full px-4 lg:w-1/2">
     <div
-      className="wow fadeInUp relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0"
+      className="wow fadeInUp relative mx-auto max-w-[500px] lg:mr-0"
       data-wow-delay=".2s"
     >
       <img
@@ -25,7 +25,7 @@ export const Produkt = ({ title, subtitle, image, children, type }) => (
             <SectionTitle title={title} paragraph={subtitle} mb="44px" />
 
             <div
-              className="text-white wow fadeInUp mb-12 max-w-[570px] lg:mb-0"
+              className="dark:text-white wow fadeInUp mb-12 max-w-[570px] lg:mb-0"
               data-wow-delay=".15s"
             >
               {children}

@@ -54,54 +54,9 @@ module.exports = withMDX(nextConfig)
 
 ## Administrace
 
-Instalace knihovny:
+Postup zprovoznění: https://www.staticcms.org/docs/add-to-your-site-cdn
+
+Spuštění lokálního backendu:
 ```bash
-npm install @staticcms/core@latest
+npx @staticcms/proxy-server
 ```
-
-Vytvořit adresář `/src/app/admin` a do něj umístit následující soubory:
-
-### layout.jsx
-```jsx
-import Script from "next/script";
-
-export const metadata = {
-  title: "Administrace",
-};
-
-export default ({ children }) => {
-  return (
-    <html lang="cs">
-      <Script
-        src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-        async
-      />
-      <body>{children}</body>
-    </html>
-  );
-};
-```
-
-### page.jsx
-
-```jsx
-"use client";
-
-import dynamic from "next/dynamic";
-
-export default () => {
-  const CMSPage = useMemo(
-    () =>
-      dynamic(() => import("@/components/cms/CMSPage"), {
-        ssr: false,
-      }),
-    []
-  );
-
-  return useMemo(() => <CMSPage key="admin" />, [CMSPage]);
-};
-```
-
-* přidat komponentu `cms/CMSPage.jsx`
-* nakonfigurovat administraci v souboru `/src/config.js`
-* spustit `npx @staticcms/proxy-server`

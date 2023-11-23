@@ -9,8 +9,10 @@ const inter = Inter({ subsets: ["latin"] });
 export default ({ children }) => {
   return (
     <html lang="cs">
-      <head />
-      <body className={`bg-[#FCFCFC] dark:bg-black text-white ${inter.className}`}>
+      <head>
+        <link rel="icon" type="image/png" href="/images/favicon.png"/>
+      </head>
+      <body className={`bg-[#FCFCFC] text-black dark:bg-black dark:text-white ${inter.className}`}>
         <Header />
         {children}
         <Footer />
